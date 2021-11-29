@@ -1,0 +1,67 @@
+const songs = [{
+        name: "Ái Nộ 1",
+        author: "Masew, Khôi Vũ",
+        link: "./data/music/aino.mp3",
+        image: "./data/img/aino.png",
+    },
+    {
+        name: "Bước Qua Nhau",
+        author: "Vũ",
+        link: "./data/music/buocquanhau.mp3",
+        image: "./data/img/buocquanhau.png",
+    },
+    {
+        name: "Câu Hẹn Câu Thề",
+        author: "Đình Dũng",
+        link: "./data/music/cauhencauthe.mp3",
+        image: "./data/img/cauhencauthe.png",
+    },
+    {
+        name: "Câu Hứa Chưa Vẹn Tròn",
+        author: "Phát Huy T4",
+        link: "./data/music/cauhuachuaventoan.mp3",
+        image: "./data/img/cauhuachuaventoan.png",
+    },
+    {
+        name: "Có hẹn với thanh xuân",
+        author: "Monstar",
+        link: "./data/music/cohenvoithanhxuan.mp3",
+        image: "./data/img/cohenvoithanhxuan.png",
+    },
+    {
+        name: "Cưới thôi",
+        author: "Masew, BRay, TAP",
+        link: "./data/music/cuoithoi.mp3",
+        image: "./data/img/cuoithoi.png",
+    },
+    {
+        name: "Dịu dàng em đến",
+        author: "Erik, Ninja Z",
+        link: "./data/music/diudangemden.mp3",
+        image: "./data/img/diudangemden.png",
+    },
+    {
+        name: "Độ tộc 2",
+        author: "Masew, Độ Mixi, Phúc Du, Thảo",
+        link: "./data/music/dotoc2.mp3",
+        image: "./data/img/dotoc2.png",
+    },
+    {
+        name: "Sài Gòn đâu có lạnh",
+        author: "Changg, LeWiuy",
+        link: "./data/music/saigondaucolanh.mp3",
+        image: "./data/img/saigondaucolanh.png",
+    },
+    {
+        name: "Thê Lương",
+        author: "Phúc Chính",
+        link: "./data/music/theluong.mp3",
+        image: "./data/img/theluong.png",
+    },
+    {
+        name: "Yêu là cưới",
+        author: "Phát Hồ, X2X",
+        link: "./data/music/yeulacuoi.mp3",
+        image: "./data/img/yeulacuoi.png",
+    },
+];
