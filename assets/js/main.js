@@ -7,12 +7,19 @@ const cdThumb = $(".cd .cd-thumb ");
 const audio = $("#audio");
 const btnPlay = $(".btn-play");
 const btnPause = $(".btn-pause");
+const btnPrevious = $(".btn-previous");
+const btnNext = $(".btn-next");
+const btnRandom = $(".btn-random");
+
 const range = $("#range");
 const timeDuration = $(".time-duration");
+
 //
+
 const app = {
     currentIndex: 3,
     isPlay: false,
+    isRandom: false,
     songs: [{
             name: "Ái Nộ 1",
             author: "Masew, Khôi Vũ",
@@ -121,12 +128,14 @@ const app = {
             btnPlay.style.display = "none";
             btnPause.style.display = "block";
             _this.isPlay = true;
+            cdThumbAnimate.play();
         };
         // khi audio pause
         audio.onpause = () => {
             btnPause.style.display = "none";
             btnPlay.style.display = "block";
             _this.isPlay = false;
+            cdThumbAnimate.pause();
         };
         // lang nghe time của audio
         audio.ontimeupdate = () => {
@@ -144,9 +153,44 @@ const app = {
             const second = Math.floor(audio.duration % 60);
             timeDuration.innerHTML = `<p>${minute}:${second}</p> `;
         };
+        //quay dia cd
+        const cdThumbAnimate = cdThumb.animate([{ transform: " rotate(360deg)" }], {
+            duration: 15000,
+            iterations: Infinity,
+        });
+        cdThumbAnimate.pause();
         // tua nhac
         range.oninput = (e) => {
             audio.currentTime = (e.target.value * audio.duration) / 100;
+        };
+        //bai hat truoc do
+        btnPrevious.onclick = () => {
+            if (!_this.isRandom) {
+                _this.prevSong();
+            } else {
+                _this.randomSong();
+            }
+
+            audio.play();
+        };
+        //next bai hat
+        btnNext.onclick = () => {
+            if (!_this.isRandom) {
+                _this.nextSong();
+            } else {
+                _this.randomSong();
+            }
+            audio.play();
+        };
+        //random bai hat
+        btnRandom.onclick = () => {
+            // if (!_this.isRandom && btnRandom.classList.contains("active")) {
+            //     btnRandom.classList.remove("active");
+            // } else {
+            //     btnRandom.classList.add("active");
+            // }
+            _this.isRandom = !_this.isRandom;
+            btnRandom.classList.toggle("active", _this.isRandom);
         };
     },
     dfineProperties() {
@@ -161,11 +205,36 @@ const app = {
         cdThumb.style.backgroundImage = `url("${this.currentSong.image}")`;
         audio.src = this.currentSong.link;
     },
+    prevSong() {
+        this.currentIndex--;
+        if (this.currentIndex < 0) {
+            this.currentIndex = this.songs.length - 1;
+        }
+        this.loadCurrentSong();
+    },
+    nextSong() {
+        this.currentIndex++;
+        if (this.currentIndex > this.songs.length - 1) {
+            this.currentIndex = 0;
+        }
+        this.loadCurrentSong();
+    },
+    randomSong() {
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * this.songs.length);
+        } while (newIndex === this.currentIndex);
+        this.currentIndex = newIndex;
+        this.loadCurrentSong();
+    },
+
     start() {
         this.dfineProperties();
         this.handleEvents();
         this.loadCurrentSong();
         this.render();
+        this.prevSong();
+        this.nextSong();
     },
 };
 app.start();

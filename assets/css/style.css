@@ -94,8 +94,12 @@ header h2 {
     line-height: 54px;
 }
 
-.control .btn-random {
+.control .btn-random.active {
     color: var(--primary-color);
+}
+
+.control .btn-random {
+    color: #333;
 }
 
 .time-duration {
