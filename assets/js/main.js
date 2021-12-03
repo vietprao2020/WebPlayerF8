@@ -1,6 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const KEY_LOCALSTORAGE = "MUSIC_PLAYER";
 //
 const headerName = $("header h2");
 const cdThumb = $(".cd .cd-thumb ");
@@ -10,16 +11,24 @@ const btnPause = $(".btn-pause");
 const btnPrevious = $(".btn-previous");
 const btnNext = $(".btn-next");
 const btnRandom = $(".btn-random");
+const btnRedo = $(".btn-redo");
 
 const range = $("#range");
 const timeDuration = $(".time-duration");
 
-//
+const playList = $(".play-list");
 
+//
 const app = {
-    currentIndex: 3,
+    currentIndex: 0,
     isPlay: false,
     isRandom: false,
+    isRedo: false,
+    config: JSON.parse(localStorage.getItem(KEY_LOCALSTORAGE)) || {},
+    setConfig: function(key, value) {
+        this.config[key] = value;
+        localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(this.config));
+    },
     songs: [{
             name: "Ái Nộ 1",
             author: "Masew, Khôi Vũ",
@@ -89,8 +98,12 @@ const app = {
     ],
     render() {
         const htmls = this.songs.map((song, index) => {
-            return `<div class="song">
-                        <div class="song-image" style="background-image: url('${song.image}')"></div>
+            return `<div class="song ${
+        index === this.currentIndex ? "active" : ""
+      }"index='${index}'>
+                        <div class="song-image" style="background-image: url('${
+                          song.image
+                        }')"></div>
                         <div class="song-infor">
                             <h2 class="song-name">${song.name}</h2>
                             <div class="song-author">${song.author}</div>
@@ -100,7 +113,6 @@ const app = {
                         </div>
                     </div>`;
         });
-        const playList = $(".play-list");
         playList.innerHTML = htmls.join("");
     },
     handleEvents() {
@@ -172,6 +184,8 @@ const app = {
             }
 
             audio.play();
+            _this.render();
+            _this.scrollIntoView();
         };
         //next bai hat
         btnNext.onclick = () => {
@@ -181,6 +195,8 @@ const app = {
                 _this.randomSong();
             }
             audio.play();
+            _this.render();
+            _this.scrollIntoView();
         };
         //random bai hat
         btnRandom.onclick = () => {
@@ -190,8 +206,46 @@ const app = {
             //     btnRandom.classList.add("active");
             // }
             _this.isRandom = !_this.isRandom;
+
             btnRandom.classList.toggle("active", _this.isRandom);
+            _this.setConfig("isRandom", _this.isRandom);
         };
+        btnRedo.onclick = () => {
+            // if (!_this.isRandom && btnRandom.classList.contains("active")) {
+            //     btnRandom.classList.remove("active");
+            // } else {
+            //     btnRandom.classList.add("active");
+            // }
+            _this.isRedo = !_this.isRedo;
+            btnRedo.classList.toggle("active", _this.isRedo);
+            _this.setConfig("isRedo", _this.isRedo);
+        };
+        //xu li khi het bai hat
+        audio.onended = () => {
+            // check redo song
+            if (_this.isRedo) {
+                audio.play();
+            } else {
+                btnNext.click();
+            }
+        };
+        playList.onclick = (e) => {
+            const songElement = e.target.closest(".song:not(.active)");
+            if (songElement || e.target.closest(".song-more")) {
+                if (songElement) {
+                    this.currentIndex = Number(songElement.getAttribute("index"));
+                    this.loadCurrentSong();
+                    this.render();
+                    audio.play();
+                }
+                if (e.target.closest(".song-more")) {}
+            }
+            console.log(this);
+        };
+    },
+    loadConfig() {
+        this.isRandom = this.config.isRandom;
+        this.isRedo = this.config.isRedo;
     },
     dfineProperties() {
         Object.defineProperty(this, "currentSong", {
@@ -227,14 +281,25 @@ const app = {
         this.currentIndex = newIndex;
         this.loadCurrentSong();
     },
-
+    scrollIntoView() {
+        setTimeout(() => {
+            $(".song.active").scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+            });
+        }, 200);
+    },
     start() {
+        this.loadConfig();
         this.dfineProperties();
         this.handleEvents();
         this.loadCurrentSong();
         this.render();
         this.prevSong();
         this.nextSong();
+        btnRedo.classList.toggle("active", this.isRedo);
+
+        btnRandom.classList.toggle("active", this.isRandom);
     },
 };
 app.start();

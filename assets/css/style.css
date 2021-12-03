@@ -79,7 +79,7 @@ header h2 {
 }
 
 .control .btn-redo {
-    color: var(--primary-color);
+    color: #333;
 }
 
 .control .btn-play,
@@ -94,7 +94,8 @@ header h2 {
     line-height: 54px;
 }
 
-.control .btn-random.active {
+.control .btn-random.active,
+.control .btn-redo.active {
     color: var(--primary-color);
 }
 
@@ -142,6 +143,15 @@ header h2 {
     border-radius: 5px;
     padding: 12px 24px;
     margin-bottom: 16px;
+}
+
+.song.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.song:active {
+    opacity: 0.7;
 }
 
 .song .song-image {
